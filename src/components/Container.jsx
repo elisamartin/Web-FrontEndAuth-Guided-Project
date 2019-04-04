@@ -4,27 +4,32 @@ import Login from './Login';
 import Users from './Users';
 import './Container.less';
 
-
+// users screen that displays users
+//login screen
 export function Container(props) {
-  const onLogout = () => {
-    // kill the token!
-  };
+	const onLogout = () => {
+		// kill the token!
+		localStorage.clear();
+		props.history.replace('/');
+	};
 
-  return (
-    <div className='container'>
-      <nav>
-        <span>
+	return (
+		<div className="container">
+			<nav>
+				<span>
+					<NavLink to="/">Login</NavLink>
+					<NavLink to="/users">Users</NavLink>
+				</span>
 
-        </span>
+				<button onClick={onLogout}>Logout</button>
+			</nav>
 
-        <button onClick={onLogout}>Logout</button>
-      </nav>
-
-      <main>
-
-      </main>
-    </div>
-  );
+			<main>
+				<Route exact path="/" component={Login} />
+				<Route exact path="/users" component={Users} />
+			</main>
+		</div>
+	);
 }
 
-export default Container;
+export default withRouter(Container);

@@ -14,11 +14,27 @@
 
   <script>
     function makeToken(payload, secret) {
-
+      // we need an encoder, why? because we want the token to be super portable
+      //hashing function
+      const endodedPayload = btoa(JSON.stringify(payload));
+      const encodedSignature = btoa(md5(encodedPayload + btoa(secret)));
+      return `${encodedPayload}.${encodedSignature}`
     }
 
     function verifyToken(token, secret) {
+      // if token pases, return parsed payload
+      // otherwise return some string with error message
+      // we can encode a base64 string with atob (atomic to binary)
+      // to verify, check the signature can be rebuild off of payload
+      const [encodedPayload, encodedSignature] = token.split('.');
+      const signature = btoa(md5(encodedPayload + btoa(secret)));
 
+      if (signature === encodedSignature) {
+        const payload = JSON.parse(atob(encodedPayload))
+        return payload;
+      } else {
+        return 'No way'
+      }
     }
   </script>
 </body>
